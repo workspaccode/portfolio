@@ -7,7 +7,6 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ExternalLink, Github, Mail, Phone, MapPin, Linkedin, ArrowUp, MessageCircle, Sun, Moon } from 'lucide-react'
-import { SetupNotice } from '@/components/setup-notice'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import SplineEmbed from '@/components/SplineEmbed'
@@ -109,8 +108,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background text-foreground bg-animated-gradient">
-      <SetupNotice />
-      
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 glass-surface">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -249,9 +246,6 @@ export default function Home() {
           {Object.keys(skillsByCategory).length === 0 ? (
             <div className="text-center py-12">
               <p className="text-muted-foreground mb-4">No technologies added yet.</p>
-              <Button asChild>
-                <Link href="/admin/login">Add Technologies</Link>
-              </Button>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
@@ -293,9 +287,6 @@ export default function Home() {
           {projects.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-muted-foreground mb-4">No projects yet.</p>
-              <Button asChild>
-                <Link href="/admin/login">Add Your First Project</Link>
-              </Button>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
