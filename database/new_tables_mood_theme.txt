@@ -1,0 +1,178 @@
+================================================================================
+ملف توثيق الجداول الجديدة لنظام Mood Theme
+================================================================================
+
+هذا الملف يحتوي على توثيق الجداول الجديدة المطلوبة لنظام إدارة المواضيع (Mood Theme)
+في نظام Portfolio Management System.
+
+================================================================================
+الجداول المطلوبة:
+================================================================================
+
+1. جدول themes (المواضيع)
+   -------------------------
+   الوصف: تخزين المواضيع المختلفة المتاحة في النظام
+   
+   الحقول:
+   - id: UUID (Primary Key) - معرف فريد للموضوع
+   - name: TEXT (NOT NULL) - اسم الموضوع (مثل: "Dark", "Light", "Ocean", "Sunset")
+   - display_name: TEXT (NOT NULL) - الاسم المعروض للمستخدم
+   - description: TEXT - وصف مختصر للموضوع
+   - is_active: BOOLEAN (DEFAULT true) - هل الموضوع نشط ومتاح للاستخدام
+   - is_default: BOOLEAN (DEFAULT false) - هل هذا هو الموضوع الافتراضي
+   - preview_image_url: TEXT - رابط صورة معاينة للموضوع
+   - created_at: TIMESTAMP (DEFAULT now()) - تاريخ الإنشاء
+   - updated_at: TIMESTAMP (DEFAULT now()) - تاريخ آخر تحديث
+
+   العلاقات:
+   - لا توجد علاقات مباشرة مع جداول أخرى
+
+   الاستخدام:
+   - إدارة المواضيع المتاحة في النظام
+   - اختيار الموضوع الافتراضي
+   - عرض معاينة المواضيع للمستخدمين
+
+
+2. جدول theme_settings (إعدادات المواضيع)
+   -----------------------------------------
+   الوصف: تخزين الإعدادات التفصيلية لكل موضوع (الألوان، الخطوط، الأنماط)
+   
+   الحقول:
+   - id: UUID (Primary Key) - معرف فريد للإعداد
+   - theme_id: UUID (NOT NULL, Foreign Key -> themes.id) - معرف الموضوع
+   - setting_key: TEXT (NOT NULL) - مفتاح الإعداد (مثل: "primary_color", "font_family")
+   - setting_value: TEXT (NOT NULL) - قيمة الإعداد (مثل: "#FF6B35", "Inter")
+   - setting_type: TEXT (NOT NULL) - نوع الإعداد (مثل: "color", "string", "number")
+   - display_name: TEXT - الاسم المعروض للإعداد
+   - category: TEXT - فئة الإعداد (مثل: "colors", "typography", "spacing")
+   - created_at: TIMESTAMP (DEFAULT now()) - تاريخ الإنشاء
+   - updated_at: TIMESTAMP (DEFAULT now()) - تاريخ آخر تحديث
+
+   العلاقات:
+   - theme_id -> themes.id (ON DELETE CASCADE)
+
+   الاستخدام:
+   - تخزين جميع الإعدادات المرئية لكل موضوع
+   - تخصيص الألوان والخطوط والمسافات لكل موضوع
+   - السماح بتعديل الإعدادات دون تغيير بنية الجدول
+
+
+3. جدول user_theme_preferences (تفضيلات المستخدم للمواضيع)
+   ---------------------------------------------------------
+   الوصف: تخزين تفضيلات المستخدمين للمواضيع المفضلة
+   
+   الحقول:
+   - id: UUID (Primary Key) - معرف فريد للتفضيل
+   - user_identifier: TEXT (NOT NULL) - معرف المستخدم (يمكن أن يكون IP أو session_id)
+   - theme_id: UUID (NOT NULL, Foreign Key -> themes.id) - الموضوع المختار
+   - preference_type: TEXT (NOT NULL) - نوع التفضيل (مثل: "selected", "favorite")
+   - is_active: BOOLEAN (DEFAULT true) - هل التفضيل نشط
+   - metadata: JSONB - بيانات إضافية (مثل: أوقات الاختيار، الإحصائيات)
+   - created_at: TIMESTAMP (DEFAULT now()) - تاريخ الإنشاء
+   - updated_at: TIMESTAMP (DEFAULT now()) - تاريخ آخر تحديث
+
+   العلاقات:
+   - theme_id -> themes.id (ON DELETE CASCADE)
+
+   الاستخدام:
+   - حفظ اختيارات المستخدمين للمواضيع
+   - تتبع المواضيع الأكثر شعبية
+   - استعادة تفضيلات المستخدم عند زيارته التالية
+
+
+4. جدول theme_variants (متغيرات المواضيع)
+   -----------------------------------------
+   الوصف: تخزين المتغيرات المختلفة لنفس الموضوع (مثل: Dark Mode, Light Mode)
+   
+   الحقول:
+   - id: UUID (Primary Key) - معرف فريد للمتغير
+   - theme_id: UUID (NOT NULL, Foreign Key -> themes.id) - الموضوع الأساسي
+   - variant_name: TEXT (NOT NULL) - اسم المتغير (مثل: "dark", "light", "high_contrast")
+   - display_name: TEXT (NOT NULL) - الاسم المعروض
+   - is_default: BOOLEAN (DEFAULT false) - هل هذا هو المتغير الافتراضي
+   - settings_override: JSONB - إعدادات خاصة بهذا المتغير تعلو على الإعدادات الأساسية
+   - created_at: TIMESTAMP (DEFAULT now()) - تاريخ الإنشاء
+   - updated_at: TIMESTAMP (DEFAULT now()) - تاريخ آخر تحديث
+
+   العلاقات:
+   - theme_id -> themes.id (ON DELETE CASCADE)
+
+   الاستخدام:
+   - إدارة متغيرات مختلفة لنفس الموضوع
+   - السماح بتبديل سريع بين Dark Mode و Light Mode
+   - تخصيص متغيرات خاصة بكل موضوع
+
+
+5. جدول theme_customizations (التخصيصات المخصصة)
+   ------------------------------------------------
+   الوصف: تخزين التخصيصات المخصصة التي ينشئها المستخدمون
+   
+   الحقول:
+   - id: UUID (Primary Key) - معرف فريد للتخصيص
+   - user_identifier: TEXT (NOT NULL) - معرف المستخدم
+   - base_theme_id: UUID (Foreign Key -> themes.id) - الموضوع الأساسي
+   - customization_name: TEXT (NOT NULL) - اسم التخصيص
+   - custom_settings: JSONB (NOT NULL) - الإعدادات المخصصة
+   - is_public: BOOLEAN (DEFAULT false) - هل التخصيص عام ومتاح للآخرين
+   - is_active: BOOLEAN (DEFAULT true) - هل التخصيص نشط
+   - usage_count: INTEGER (DEFAULT 0) - عدد مرات الاستخدام
+   - created_at: TIMESTAMP (DEFAULT now()) - تاريخ الإنشاء
+   - updated_at: TIMESTAMP (DEFAULT now()) - تاريخ آخر تحديث
+
+   العلاقات:
+   - base_theme_id -> themes.id (ON DELETE SET NULL)
+
+   الاستخدام:
+   - السماح للمستخدمين بإنشاء مواضيع مخصصة
+   - مشاركة التخصيصات بين المستخدمين
+   - تتبع التخصيصات الأكثر شعبية
+
+
+================================================================================
+مؤشرات الأداء (Indexes) الموصى بها:
+================================================================================
+
+1. themes:
+   - CREATE INDEX idx_themes_is_active ON themes(is_active);
+   - CREATE INDEX idx_themes_is_default ON themes(is_default);
+
+2. theme_settings:
+   - CREATE INDEX idx_theme_settings_theme_id ON theme_settings(theme_id);
+   - CREATE INDEX idx_theme_settings_key ON theme_settings(setting_key);
+   - CREATE INDEX idx_theme_settings_category ON theme_settings(category);
+
+3. user_theme_preferences:
+   - CREATE INDEX idx_user_prefs_user_identifier ON user_theme_preferences(user_identifier);
+   - CREATE INDEX idx_user_prefs_theme_id ON user_theme_preferences(theme_id);
+   - CREATE INDEX idx_user_prefs_active ON user_theme_preferences(is_active);
+
+4. theme_variants:
+   - CREATE INDEX idx_theme_variants_theme_id ON theme_variants(theme_id);
+   - CREATE INDEX idx_theme_variants_default ON theme_variants(is_default);
+
+5. theme_customizations:
+   - CREATE INDEX idx_customizations_user ON theme_customizations(user_identifier);
+   - CREATE INDEX idx_customizations_theme ON theme_customizations(base_theme_id);
+   - CREATE INDEX idx_customizations_public ON theme_customizations(is_public, is_active);
+
+
+================================================================================
+ملاحظات مهمة:
+================================================================================
+
+1. جميع الجداول تستخدم UUID كمعرفات رئيسية
+2. جميع الجداول تحتوي على created_at و updated_at لتتبع التغييرات
+3. استخدام JSONB في بعض الحقول يسمح بمرونة في تخزين البيانات المخصصة
+4. يمكن إضافة جدول audit_log لتتبع تغييرات المواضيع في المستقبل
+5. يجب تعطيل Row Level Security (RLS) على هذه الجداول كما في الجداول الأخرى
+6. يمكن إضافة جدول theme_analytics لتتبع إحصائيات استخدام المواضيع
+
+
+================================================================================
+نهاية التوثيق
+================================================================================
+
+تاريخ الإنشاء: 2024
+المشروع: Portfolio Management System
+الإصدار: 1.0
+

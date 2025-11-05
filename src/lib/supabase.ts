@@ -267,6 +267,173 @@ export type Database = {
           updated_at?: string
         }
       }
+      themes: {
+        Row: {
+          id: string
+          name: string
+          display_name: string
+          description: string | null
+          is_active: boolean
+          is_default: boolean
+          preview_image_url: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          display_name: string
+          description?: string | null
+          is_active?: boolean
+          is_default?: boolean
+          preview_image_url?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          display_name?: string
+          description?: string | null
+          is_active?: boolean
+          is_default?: boolean
+          preview_image_url?: string | null
+          updated_at?: string
+        }
+      }
+      theme_settings: {
+        Row: {
+          id: string
+          theme_id: string
+          setting_key: string
+          setting_value: string
+          setting_type: string
+          display_name: string | null
+          category: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          theme_id: string
+          setting_key: string
+          setting_value: string
+          setting_type: string
+          display_name?: string | null
+          category?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          theme_id?: string
+          setting_key?: string
+          setting_value?: string
+          setting_type?: string
+          display_name?: string | null
+          category?: string | null
+          updated_at?: string
+        }
+      }
+      user_theme_preferences: {
+        Row: {
+          id: string
+          user_identifier: string
+          theme_id: string
+          preference_type: string
+          is_active: boolean
+          metadata: Record<string, any> | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_identifier: string
+          theme_id: string
+          preference_type?: string
+          is_active?: boolean
+          metadata?: Record<string, any> | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_identifier?: string
+          theme_id?: string
+          preference_type?: string
+          is_active?: boolean
+          metadata?: Record<string, any> | null
+          updated_at?: string
+        }
+      }
+      theme_variants: {
+        Row: {
+          id: string
+          theme_id: string
+          variant_name: string
+          display_name: string
+          is_default: boolean
+          settings_override: Record<string, any> | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          theme_id: string
+          variant_name: string
+          display_name: string
+          is_default?: boolean
+          settings_override?: Record<string, any> | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          theme_id?: string
+          variant_name?: string
+          display_name?: string
+          is_default?: boolean
+          settings_override?: Record<string, any> | null
+          updated_at?: string
+        }
+      }
+      theme_customizations: {
+        Row: {
+          id: string
+          user_identifier: string
+          base_theme_id: string | null
+          customization_name: string
+          custom_settings: Record<string, any>
+          is_public: boolean
+          is_active: boolean
+          usage_count: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_identifier: string
+          base_theme_id?: string | null
+          customization_name: string
+          custom_settings?: Record<string, any>
+          is_public?: boolean
+          is_active?: boolean
+          usage_count?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_identifier?: string
+          base_theme_id?: string | null
+          customization_name?: string
+          custom_settings?: Record<string, any>
+          is_public?: boolean
+          is_active?: boolean
+          usage_count?: number
+          updated_at?: string
+        }
+      }
     }
   }
 }
