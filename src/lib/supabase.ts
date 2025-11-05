@@ -13,9 +13,10 @@ const createMockClient = () => {
     // mimic select().single()
     async single() { return { data: null, error: null } },
     async maybeSingle() { return { data: null, error: null } },
-    order() { return { data: [], error: null } },
-    eq() { return { single: async () => ({ data: null, error: null }) } },
-    limit() { return { then: (res: any) => res } },
+    order() { return selectChain },
+    eq() { return selectChain },
+    limit() { return selectChain },
+    then(resolve: any) { return resolve({ data: [], error: null }) }
   }
 
   const insertChain = {
